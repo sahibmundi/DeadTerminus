@@ -8,7 +8,7 @@ DeadTerminus is a powerful cybersecurity simulation toolkit that allows users to
 It features a modular architecture with a terminal-based interface, offering immersive visualizations and interactive simulations for educational, testing, and ethical hacking purposes.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/your_image_here.png" alt="DeadTerminus Preview" width="500">
+  <img src="https://github.com/user-attachments/assets/acd382e5-fe2d-4d59-bd21-bce74e18f19b" alt="DeadTerminus Preview" width="1000">
 </p>
 
 --------------------------------------------
