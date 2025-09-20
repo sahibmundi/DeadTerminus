@@ -45,8 +45,3 @@ It features a modular architecture with a terminal-based interface, offering imm
 - No special hardware required unless extended simulation modules are added
 
 ------------------------------------------------------------------------
-## 🔧 STEPS TO CONFIGURE
-1. **CLONE THE REPOSITORY:**  
-```bash
-git clone https://github.com/your-username/DeadTerminus.git
-cd DeadTerminus
