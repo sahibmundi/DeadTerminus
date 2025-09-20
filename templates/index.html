@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeadTerminus</title>
+    <style>
+        body { background: #1F2937; color: #FFF; font-family: Arial, sans-serif; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 18px; }
+        h1 { font-size: 36px; font-weight: bold; text-align: center; color: #DC2626; margin-bottom: 30px; }
+        .grid { display: grid; gap: 20px; }
+        @media (min-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        .card { background: #2d3441; border-radius: 6px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: box-shadow 0.3s; }
+        .card:hover { box-shadow: 0 0 15px rgba(239,68,68,0.5); }
+        .card h2 { font-size: 20px; color: #EF4444; }
+        .card p { color: #9CA3AF; margin: 8px 0; }
+        .card button { margin-top: 10px; background: #DC2626; color: #FFF; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
+        .card button:hover { background: #B91C1C; }
+        footer { margin-top: 30px; text-align: center; color: #6B7280; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; }
+        .modal.hidden { display: none; }
+        .modal-content { background: #374151; padding: 20px; border-radius: 8px; width: 350px; }
+        .modal-content h2 { font-size: 24px; color: #DC2626; margin-bottom: 12px; }
+        .progress-bar-container { margin-top: 12px; height: 8px; background: #4B5563; border-radius: 4px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #DC2626; border-radius: 4px; width: 0; transition: width 7s linear; }
+        .progress-bar.animate { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+    <script>
+        function launchModule(moduleName) {
+            const modal = document.getElementById('install-modal');
+            const status = document.getElementById('install-status');
+            const progress = document.getElementById('progress-bar');
+            modal.classList.remove('hidden');
+            progress.style.width = '0';
+            progress.classList.add('animate');
+            const steps = ["Connecting to Network...", "Verifying License...", "Authenticating...", "Downloading Packages...", "Preparing Environment...", "Compiling...", "Launching Module..."];
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < steps.length) {
+                    status.textContent = steps[i];
+                    progress.style.width = `${(i + 1) * (100 / steps.length)}%`;
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    fetch('/install/' + moduleName, { method: 'POST' })
+                        .then(res => res.json())
+                        .then(data => {
+                            status.textContent = data.status === 'success' ? 'Module Launched!' : 'Error: ' + data.message;
+                            setTimeout(() => {
+                                modal.classList.add('hidden');
+                                progress.classList.remove('animate');
+                            }, data.status === 'success' ? 1000 : 2000);
+                        });
+                }
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>💀 DeadTerminus Cyber Optimization Suite 💀</h1>
+        <div class="grid">
+            {% for name, info in modules.items() %}
+            <div class="card">
+                <h2>{{ name }}</h2>
+                <p>{{ info.desc }}</p>
+                <button onclick="launchModule('{{ name }}')">Launch</button>
+            </div>
+            {% endfor %}
+        </div>
+        <footer>© 2025 CYBERSECURITY | PRANK APP FOR EDUCATION.</footer>
+    </div>
+    <div id="install-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Installing...</h2>
+            <p id="install-status">Starting...</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
